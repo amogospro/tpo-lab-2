@@ -36,10 +36,15 @@ public class FunctionSystem implements SeriesExpandableFunction {
 
     @Override
     public BigDecimal calculate(final BigDecimal x, final BigDecimal precision) {
-        final MathContext mc = new MathContext(DECIMAL128.getPrecision(), HALF_EVEN);
-        if (x.compareTo(ZERO) <= 0) {
-            // Тригонометрическая ветвь для x ≤ 0:
-            // Приводим x к диапазону [0, 2π)
+        // Если аргумент или точность равны null, будут выброшены исключения при вызове compareTo
+        // Добавляем проверку для x = 0
+        if (x.compareTo(ZERO) == 0) {
+            return ZERO.setScale(precision.scale(), HALF_EVEN);
+        }
+
+        // Если x <= 0, используем тригонометрическую ветвь
+        if (x.compareTo(ZERO) < 0) {
+            final MathContext mc = new MathContext(DECIMAL128.getPrecision(), HALF_EVEN);
             BigDecimal twoPi = BigDecimalMath.pi(mc).multiply(new BigDecimal("2"));
             BigDecimal correctedX = x.remainder(twoPi);
             if (correctedX.compareTo(ZERO) < 0) {
@@ -50,24 +55,26 @@ public class FunctionSystem implements SeriesExpandableFunction {
             BigDecimal secVal = sec.calculate(correctedX, precision);
             BigDecimal cscVal = csc.calculate(correctedX, precision);
 
-            // (cos(x) + cos(x)) / cos(x)
+            // (cos(x)+cos(x))/cos(x)
             BigDecimal part1 = (cosVal.add(cosVal))
                     .divide(cosVal, precision.scale() + 5, HALF_EVEN);
-            // sec(x) / cos(x)
+            // sec(x)/cos(x)
             BigDecimal part2 = secVal.divide(cosVal, precision.scale() + 5, HALF_EVEN);
             BigDecimal firstProduct = part1.multiply(part2);
 
-            // (csc(x) - sin(x)) / (csc(x)/sin(x))
+            // (csc(x)-sin(x))/(csc(x)/sin(x))
             BigDecimal numerator = cscVal.subtract(sinVal);
             BigDecimal denominator = cscVal.divide(sinVal, precision.scale() + 5, HALF_EVEN);
             BigDecimal secondProduct = numerator.divide(denominator, precision.scale() + 5, HALF_EVEN);
 
             BigDecimal result = firstProduct.multiply(secondProduct).multiply(cscVal);
             return result.setScale(precision.scale(), HALF_EVEN);
-        } else {
-            // Логарифмическая ветвь для x > 0:
-            // f(x) = ((ln(x) - log₂(x))³ + ln(x)) - ((ln(x) + log₁₀(x)) * (log₂(x))³) + log₁₀(x)
+        } else { // x > 0, логарифмическая ветвь
             BigDecimal A = ln.calculate(x, precision);
+            // Если ln(x) равен 0 (например, при x = 1), возвращаем null
+            if (A.compareTo(ZERO) == 0) {
+                return null;
+            }
             BigDecimal B = log2.calculate(x, precision);
             BigDecimal C = log10.calculate(x, precision);
             BigDecimal part1 = (A.subtract(B)).pow(3);
