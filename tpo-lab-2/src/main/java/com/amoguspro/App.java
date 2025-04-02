@@ -18,8 +18,8 @@ public class App {
         CsvWriter.write(
                 "csv/cos.csv",
                 cos,
-                new BigDecimal(-1),
-                new BigDecimal(1),
+                new BigDecimal(-10),
+                new BigDecimal(10),
                 new BigDecimal("0.1"),
                 new BigDecimal("0.0000000001")
         );
@@ -29,8 +29,8 @@ public class App {
         CsvWriter.write(
                 "csv/sin.csv",
                 sin,
-                new BigDecimal(-1),
-                new BigDecimal(1),
+                new BigDecimal(-10),
+                new BigDecimal(10),
                 new BigDecimal("0.1"),
                 new BigDecimal("0.0000000001")
         );
@@ -40,8 +40,8 @@ public class App {
         CsvWriter.write(
                 "csv/sec.csv",
                 sec,
-                new BigDecimal(-1),
-                new BigDecimal(1),
+                new BigDecimal(-10),
+                new BigDecimal(10),
                 new BigDecimal("0.1"),
                 new BigDecimal("0.0000000001")
         );
@@ -51,8 +51,8 @@ public class App {
         CsvWriter.write(
                 "csv/csc.csv",
                 csc,
-                new BigDecimal(-1),
-                new BigDecimal(1),
+                new BigDecimal(-10),
+                new BigDecimal(10),
                 new BigDecimal("0.1"),
                 new BigDecimal("0.0000000001")
         );
@@ -61,7 +61,7 @@ public class App {
         CsvWriter.write(
                 "csv/ln.csv",
                 ln,
-                new BigDecimal(1),
+                new BigDecimal(0),
                 new BigDecimal(20),
                 new BigDecimal("0.1"),
                 new BigDecimal("0.0000000001")
@@ -71,7 +71,7 @@ public class App {
         CsvWriter.write(
                 "csv/log2.csv",
                 log2,
-                new BigDecimal(1),
+                new BigDecimal(0),
                 new BigDecimal(20),
                 new BigDecimal("0.1"),
                 new BigDecimal("0.00000000001")
@@ -81,7 +81,7 @@ public class App {
         CsvWriter.write(
                 "csv/log10.csv",
                 log10,
-                new BigDecimal(1),
+                new BigDecimal(0),
                 new BigDecimal(20),
                 new BigDecimal("0.1"),
                 new BigDecimal("0.00000000001")
@@ -94,8 +94,8 @@ public class App {
         CsvWriter.write(
                 "csv/func.csv",
                 func,
-                new BigDecimal(-2),
-                new BigDecimal(2),
+                new BigDecimal(-10),
+                new BigDecimal(10),
                 new BigDecimal("0.1"),
                 new BigDecimal("0.00000000001")
         );
