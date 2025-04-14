@@ -41,22 +41,10 @@ class FunctionSystemTest {
     }
 
     @Test
-    void shouldNotAcceptZeroArgument() {
-        final FunctionSystem system = new FunctionSystem();
-        assertEquals(ZERO.setScale(DEFAULT_SCALE, RoundingMode.HALF_UP), system.calculate(ZERO, DEFAULT_PRECISION));
-    }
-
-    @Test
-    void shouldNotAcceptOneArgument() {
-        final FunctionSystem system = new FunctionSystem();
-        assertNull((system.calculate(ONE, DEFAULT_PRECISION)));
-    }
-
-    @Test
     void shouldCalculateForPositiveValue() {
         final FunctionSystem system = new FunctionSystem();
-        final BigDecimal expected = new BigDecimal("2.00000000");
-        assertEquals(expected, system.calculate(new BigDecimal(-1.13), DEFAULT_PRECISION));
+        final BigDecimal expected = new BigDecimal("0.36505078");
+        assertEquals(expected, system.calculate(new BigDecimal(1.75), DEFAULT_PRECISION));
     }
 
     @Test
@@ -64,6 +52,18 @@ class FunctionSystemTest {
         final FunctionSystem system = new FunctionSystem();
         final BigDecimal expected = new BigDecimal("2.00000000");
         assertEquals(expected, system.calculate(new BigDecimal(-1.13), DEFAULT_PRECISION));
+    }
+
+    @Test
+    void shouldNotCalculateForZero() {
+        final FunctionSystem system = new FunctionSystem();
+        assertThrows(ArithmeticException.class, () -> system.calculate(new BigDecimal(0), DEFAULT_PRECISION));
+    }
+
+    @Test
+    void shouldNotCalculateForOne() {
+        final FunctionSystem system = new FunctionSystem();
+        assertThrows(ArithmeticException.class, () -> system.calculate(new BigDecimal(1), DEFAULT_PRECISION));
     }
 
     private static Stream<Arguments> illegalPrecisions() {

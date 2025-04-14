@@ -21,6 +21,13 @@ class LnTest {
     }
 
     @Test
+    void shouldNotCalculateForNegative() {
+        final Ln ln = new Ln();
+        final BigDecimal arg = new BigDecimal(-10);
+        assertThrows(ArithmeticException.class, () -> ln.calculate(arg, DEFAULT_PRECISION));
+    }
+
+    @Test
     void shouldCalculateForOne() {
         final Ln ln = new Ln();
         assertEquals(ZERO, ln.calculate(ONE, DEFAULT_PRECISION));

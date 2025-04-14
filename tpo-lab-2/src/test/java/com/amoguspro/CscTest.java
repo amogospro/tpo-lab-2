@@ -5,6 +5,7 @@ import static java.math.BigDecimal.ZERO;
 import static java.math.MathContext.DECIMAL128;
 import static java.math.RoundingMode.HALF_EVEN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 import com.amoguspro.trigonometric.Csc;
+import com.amoguspro.trigonometric.Sec;
 import com.amoguspro.trigonometric.Sin;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,6 +77,15 @@ class CscTest {
         Csc csc = new Csc();
         BigDecimal expected = new BigDecimal("1.1884"); // Precomputed 1/sin(1) ≈ 1.1884
         assertEquals(expected, csc.calculate(ONE, DEFAULT_PRECISION));
+    }
+
+    @Test
+    void shouldThrowWhenSinIsZero() {
+        // If sin(x) returns 0, then sec(x) should throw an exception.
+        final BigDecimal arg = new BigDecimal("3.1415"); // approximately π/2
+        when(mockSin.calculate(eq(arg), any(BigDecimal.class))).thenReturn(ZERO);
+        final Csc csc = new Csc(mockSin);
+        assertThrows(ArithmeticException.class, () -> csc.calculate(arg, DEFAULT_PRECISION));
     }
 
     @Test

@@ -35,11 +35,11 @@ public class FunctionSystem implements SeriesExpandableFunction {
     }
 
     @Override
-    public BigDecimal calculate(final BigDecimal x, final BigDecimal precision) {
+    public BigDecimal calculate(final BigDecimal x, final BigDecimal precision) throws ArithmeticException {
         // Если аргумент или точность равны null, будут выброшены исключения при вызове compareTo
         // Добавляем проверку для x = 0
         if (x.compareTo(ZERO) == 0) {
-            return ZERO.setScale(precision.scale(), HALF_EVEN);
+            throw new ArithmeticException("Function is undefined at zero");
         }
 
         // Если x <= 0, используем тригонометрическую ветвь
@@ -73,7 +73,7 @@ public class FunctionSystem implements SeriesExpandableFunction {
             BigDecimal A = ln.calculate(x, precision);
             // Если ln(x) равен 0 (например, при x = 1), возвращаем null
             if (A.compareTo(ZERO) == 0) {
-                return null;
+                throw new ArithmeticException("Function is undefined at this value");
             }
             BigDecimal B = log2.calculate(x, precision);
             BigDecimal C = log10.calculate(x, precision);

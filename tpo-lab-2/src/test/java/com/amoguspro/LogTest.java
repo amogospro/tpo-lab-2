@@ -54,6 +54,13 @@ class LogTest {
     }
 
     @Test
+    void shouldNotCalculateForNegative() {
+        final Log log = new Log(5);
+        final BigDecimal arg = new BigDecimal(-10);
+        assertThrows(ArithmeticException.class, () -> log.calculate(arg, DEFAULT_PRECISION));
+    }
+
+    @Test
     void shouldCalculateForOne() {
         final Log log = new Log(5);
         assertEquals(
